@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scorekeeper</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+</head>
+<body>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-half is-offset-one-quarter">
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image is-2by1">
+                                <img src="./photo-1534158914592-062992fbe900.avif">
+                            </figure>
+                        </div>
+                        <header class="card-header">
+                        <p class="card-header-title">
+                            Table Tenis Score Keeper
+                        </p>
+                        <button class="card-header-icon" aria-label="more options">
+                            <span class="icon">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                        </header>
+                        <div class="card-content">
+                        <div class="content">
+                            <h2 class="title is-1"><span id="p1Display">0</span> to <span id="p2Display">0</span></h2>
+                            <label class="label is-large is-inline">Play to:</label>
+                            <div class="select is-rounded">
+                                <select id="win">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                        <footer class="card-footer">
+                            <button class="button is-primary card-footer-item" id="p1Button">+1 Player One</button>
+                            <button class="button is-info card-footer-item" id="p2Button">+1 Player Two</button>
+                            <button class="button is-danger card-footer-item" id="reset">Reset</button>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+
+        const playerOne = {
+            score: 0,
+            button: document.querySelector('#p1Button'),
+            display: document.querySelector('#p1Display')
+        }
+
+        const playerTwo = {
+            score: 0,
+            button: document.querySelector('#p2Button'),
+            display: document.querySelector('#p2Display')
+        }
+
+        const win = document.querySelector('#win');
+        const reset = document.querySelector('#reset')
+
+        let winScore = 1;
+        let gameOver = false;
+
+        function keepScore(player, opponent){
+            if(!gameOver){
+                player.score += 1;
+                if(player.score === winScore){
+                    gameOver = true;
+                    player.display.classList.add('has-text-success');
+                    opponent.display.classList.add('has-text-danger');
+                    player.button.disabled = true;
+                    opponent.button.disabled = true;
+                }
+                player.display.innerText = player.score;
+            }
+        }
+
+        function erase(){
+            gameOver = false;
+            for(let p of [playerOne,playerTwo]){
+                p.score = 0;
+                p.display.textContent = 0;
+                p.display.classList = '';
+                p.button.disabled = false;
+            }
+        }
+
+        playerOne.button.addEventListener('click', function(){
+            keepScore(playerOne,playerTwo);
+        })
+
+        playerTwo.button.addEventListener('click', function(){
+            keepScore(playerTwo,playerOne);
+        })
+
+        win.addEventListener('change', function(){
+            winScore = parseInt(win.value);
+            reset();
+        })
+
+        reset.addEventListener('click', erase)
+
+    </script>
+</body>
+</html>
